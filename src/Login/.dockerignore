@@ -1,0 +1,5 @@
+*
+!obj/Docker/publish/*
+!obj/Docker/empty/
+!init_container.sh
+!sshd_config
