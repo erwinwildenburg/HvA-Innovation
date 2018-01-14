@@ -1,0 +1,54 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "volumes": [
+    {
+      "name": "nginx-proxy-conf",
+      "host": {
+        "sourcePath": "/var/app/current/nginx-proxy"
+      }
+    },
+	{
+      "name": "identityserver-conf",
+      "host": {
+        "sourcePath": "/var/app/current/identityserver"
+      }
+    }
+  ],
+  "containerDefinitions": [
+	{
+      "name": "identityserver",
+      "image": "148979812968.dkr.ecr.eu-central-1.amazonaws.com/identityserver:latest",
+      "essential": true,
+      "memory": 128,
+      "mountPoints": [
+        {
+          "sourceVolume": "identityserver-conf",
+          "containerPath": "/var/app/current",
+          "readOnly": true
+        }
+      ]
+    },
+    {
+      "name": "nginx-proxy",
+      "image": "nginx",
+      "essential": true,
+      "memory": 128,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 80
+        }
+      ],
+      "links": [
+		"identityserver"
+      ],
+      "mountPoints": [
+        {
+          "sourceVolume": "nginx-proxy-conf",
+          "containerPath": "/etc/nginx/conf.d",
+          "readOnly": true
+        }
+      ]
+    }
+  ]
+}
