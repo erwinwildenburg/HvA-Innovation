@@ -1,6 +1,6 @@
 import { AppPage } from './app.po';
 
-describe('innovtion-editor App', () => {
+describe('Dashboard App', () => {
   let page: AppPage;
 
   beforeEach(() => {
