@@ -17,7 +17,7 @@
   "containerDefinitions": [
 	{
       "name": "identityserver",
-      "image": "148979812968.dkr.ecr.eu-central-1.amazonaws.com/identityserver:latest",
+      "image": "xxxx.dkr.ecr.eu-central-1.amazonaws.com/identityserver:latest",
       "essential": true,
       "memory": 128,
       "mountPoints": [
@@ -27,6 +27,12 @@
           "readOnly": true
         }
       ]
+    },
+	{
+      "name": "dashboard",
+      "image": "xxxx.dkr.ecr.eu-central-1.amazonaws.com/dashboard:latest",
+      "essential": true,
+      "memory": 128
     },
     {
       "name": "nginx-proxy",
