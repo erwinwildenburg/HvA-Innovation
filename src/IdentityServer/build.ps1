@@ -3,4 +3,4 @@ dotnet publish --configuration Release -o obj/Docker/publish
 Remove-Item obj/Docker/publish/appsettings.json
 
 # Build the docker container
-docker build -t innovation/login .
+docker build -t hva-innovation/identityserver .
