@@ -1,0 +1,27 @@
+<header class="small bg-primary text-white">
+  <div class="container text-center">
+    <h1>Files</h1>
+  </div>
+</header>
+
+<section id="files">
+  <div class="container">
+
+    <div class="row">
+      <div class="col-md-12">
+        <div *ngFor="let file of files" class="file-item">
+          <div class="file-item-head"><h2>{{file.key}}</h2></div>
+          <div class="file-item-info">
+            <span>Language: {{file.info.lang}}</span>
+            <span>Created: {{file.info.create | date}}</span>
+            <span>Updated: {{file.info.edit | date}}</span>
+          </div>
+          <div class="file-item-action">
+            <button class="btn btn-block btn-primary" (click)="openFile(file)">Open</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

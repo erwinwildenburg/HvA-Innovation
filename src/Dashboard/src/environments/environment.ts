@@ -11,5 +11,5 @@ export const environment = {
   authority: 'https://identity.innovation.hva.powershelldsc.cloud',
   client_id: 'dashboard',
   response_type: 'id_token token',
-  scope: 'openid api'
+  scope: 'openid profile api'
 };

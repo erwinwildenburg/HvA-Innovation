@@ -8,6 +8,10 @@ header {
   padding: 154px 0 100px;
 }
 
+header.small {
+  padding: 104px 0 50px;
+}
+
 @media (min-width: 992px) {
   header {
     padding: 156px 0 100px;
@@ -24,4 +28,34 @@ section {
 
 .file-specs {
   text-transform: capitalize;
+}
+
+.center {
+  text-align: center;
+}
+
+.file-item {
+  width: 100%;
+  height: 300px;
+  float: left;
+  padding: 35px;
+  margin: 0 auto;
+}
+
+.file-item-head {
+  overflow: auto;
+}
+
+.file-item-info {
+  padding-bottom: 15px;
+}
+.file-item-info > span {
+  color: grey;
+  display: block;
+}
+
+@media only screen and (min-width:1000px){
+  .file-item {
+    width: 300px;
+  }
 }
