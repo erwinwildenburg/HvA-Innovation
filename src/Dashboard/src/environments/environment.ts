@@ -4,5 +4,12 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  baseTitle: 'HvA Innovation',
+  apiUrl: 'https://api.innovation.hva.powershelldsc.cloud',
+
+  authority: 'https://identity.innovation.hva.powershelldsc.cloud',
+  client_id: 'dashboard',
+  response_type: 'id_token token',
+  scope: 'openid api'
 };

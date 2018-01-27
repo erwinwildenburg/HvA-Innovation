@@ -4,34 +4,3 @@
     <p class="lead file-specs">Version: {{file.version}}, Language: {{file.language}}</p>
   </div>
 </header>
-
-<section id="edit">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="form-group">
-          <label for="lang">Set file language to:</label>
-          <select id="lang" [(ngModel)]="file.language" class="form-control">
-            <option value="english">English</option>
-            <option value="dutch">Dutch</option>
-            <option value="france">France</option>
-            <option value="japanese">Japanese</option>
-          </select>
-        </div>
-      </div>
-    </div>
-
-    <div class="row editor">
-      <div class="col-md-12">
-        <div [froalaEditor] [(froalaModel)]="file.content"></div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-12">
-        <button class="btn btn-block btn-success" (click)="storeFile(file)">Save</button>
-        <button class="btn btn-block btn-danger">Close</button>
-      </div>
-    </div>
-  </div>
-</section>

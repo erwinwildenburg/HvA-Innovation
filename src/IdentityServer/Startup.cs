@@ -1,9 +1,11 @@
+using System.Reflection;
 using IdentityServer4;
 using IdentityServer4.Quickstart.UI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
@@ -26,16 +28,26 @@ namespace IdentityServer
             // Enable Application Insights
             services.AddApplicationInsightsTelemetry(Configuration);
 
-            // Enable CORS
-            services.AddCors();
-
             // Configure IdentityServer4
+            string migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
             services.AddIdentityServer(options =>
             {
                 options.Events.RaiseSuccessEvents = true;
                 options.Events.RaiseFailureEvents = true;
                 options.Events.RaiseErrorEvents = true;
             })
+            .AddOperationalStore(options =>
+                {
+                    options.ConfigureDbContext = builder =>
+                    {
+                        string connectionString = Configuration.GetConnectionString("DefaultConnection");
+                        builder.UseMySql(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
+                    };
+
+                    // this enables automatic token cleanup. this is optional.
+                    options.EnableTokenCleanup = true;
+                    options.TokenCleanupInterval = 30;
+                })
             .AddInMemoryClients(Configuration.GetSection("Clients"))
             .AddInMemoryIdentityResources(Config.GetIdentityResources())
             .AddInMemoryApiResources(Config.GetApiResources())
@@ -45,6 +57,28 @@ namespace IdentityServer
             .AddJwtBearerClientAuthentication()
             .AddAppAuthRedirectUriValidator()
             .AddTestUsers(TestUsers.Users);
+
+            // Configure external authentication
+            services.AddOidcStateDataFormatterCache("aad", "aad");
+            services.AddAuthentication()
+                .AddOpenIdConnect("aad", "Azure AD", options =>
+                {
+                    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                    options.SignOutScheme = IdentityServerConstants.SignoutScheme;
+
+                    options.Authority = Configuration.GetValue<string>("Authentication:AzureAD:Authority");
+                    options.ClientId = Configuration.GetValue<string>("Authentication:AzureAD:ClientId");
+                    options.ResponseType = OpenIdConnectResponseType.IdToken;
+                    options.CallbackPath = new PathString("/signin-aad");
+                    options.SignedOutCallbackPath = new PathString("/signout-callback-aad");
+                    options.RemoteSignOutPath = new PathString("/signout-aad");
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false,
+                        NameClaimType = "name",
+                        RoleClaimType = "role"
+                    };
+                });
 
             services.AddMvc();
         }
@@ -66,14 +100,6 @@ namespace IdentityServer
 
                 await next.Invoke();
             });
-
-            // Add CORS options
-            app.UseCors(builder =>
-                builder.AllowAnyOrigin()
-                    .AllowAnyHeader()
-                    .AllowAnyMethod()
-                    .AllowCredentials()
-                );
 
             // Add IdentityServer4
             app.UseIdentityServer();
