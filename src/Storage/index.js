@@ -11,6 +11,24 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
     extended: true
 }));
 
+// ## CORS middleware
+// 
+// see: http://stackoverflow.com/questions/7067966/how-to-allow-cors-in-express-nodejs
+var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+      
+    // intercept OPTIONS method
+    if ('OPTIONS' == req.method) {
+      res.send(200);
+    }
+    else {
+      next();
+    }
+};
+app.use(allowCrossDomain);
+
 
 app.post('/getAllFiles', function (req, res) {
     db.selectAll().then(function (data) {
@@ -21,6 +39,20 @@ app.post('/getAllFiles', function (req, res) {
 });
 
 app.post('/getFile', function (req, res) {
+    const reqData = req.body;
+    const params = {
+        key: reqData.key,
+        title: reqData.title
+    }
+
+    db.select(params).then(function (data) {
+        res.json(data);
+    }, function (err) {
+        res.json(err);
+    });
+});
+
+app.post('/getFileContent', function (req, res) {
     const reqData = req.body;
     const params = {
         key: reqData.key
@@ -38,7 +70,7 @@ app.post('/storeFile', function (req, res) {
     const params = {
         key: reqData.key,
         title: reqData.title,
-        lang: reqData.lang,
+        lang: reqData.info.lang,
         content: reqData.content
     }
 

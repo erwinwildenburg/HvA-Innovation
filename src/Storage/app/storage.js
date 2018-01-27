@@ -37,7 +37,7 @@ Storage.prototype.get = function (object) {
                 reject(false);
             } else {
                 console.log("Get object succeeded:", JSON.stringify(data, null, 2));
-                resolve(data);
+                resolve(data.Body.toString('utf-8'));
             }
         });
     });
