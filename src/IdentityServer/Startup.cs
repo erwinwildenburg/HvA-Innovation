@@ -58,10 +58,10 @@ namespace IdentityServer
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
 
-            // Correctly set request scheme for Azure Webapp on Linux
             app.Use(async (context, next) =>
             {
-                if (!string.IsNullOrEmpty(context.Request.Headers["X-ARR-SSL"]))
+                // Correctly set request scheme for Azure Webapp on Linux and Amazon AWS
+                if (!string.IsNullOrEmpty(context.Request.Headers["X-ARR-SSL"]) || !string.IsNullOrEmpty(context.Request.Headers["X-Forwarded-Proto"]) && context.Request.Headers["X-Forwarded-Proto"].Equals("https"))
                     context.Request.Scheme = "https";
 
                 await next.Invoke();

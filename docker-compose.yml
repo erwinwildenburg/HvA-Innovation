@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  api:
+    image: hva-innovation/api
+    build:
+      context: ./src/API
+      dockerfile: Dockerfile
+  dashboard:
+    image: hva-innovation/dashboard
+    build:
+      context: ./src/Dashboard
+      dockerfile: Dockerfile
+  identityserver:
+    image: hva-innovation/identityserver
+    build:
+      context: ./src/IdentityServer
+      dockerfile: Dockerfile

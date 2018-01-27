@@ -13,4 +13,4 @@ if [ -f $FILE ]; then
 fi
 
 cd /defaulthome/hostingstart
-exec dotnet IdentityServer.dll
+exec dotnet API.dll
