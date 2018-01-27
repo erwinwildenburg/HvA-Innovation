@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-files',
@@ -8,69 +9,71 @@ import { RouterModule, Router } from '@angular/router';
 })
 export class FilesComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private http: HttpClient) {}
 
-  files = [
-    {
-      key: 'Key 1',
-      title: 'Title 1',
-      info: {
-        create: new Date().toString(),
-        edit: new Date().toString(),
-        lang: 'dutch'
-      }
-    },
-    {
-      key: 'Key 2',
-      title: 'Title 2',
-      info: {
-        create: new Date().toString(),
-        edit: new Date().toString(),
-        lang: 'dutch'
-      }
-    },
-    {
-      key: 'Key 3',
-      title: 'Title 3',
-      info: {
-        create: new Date().toString(),
-        edit: new Date().toString(),
-        lang: 'dutch'
-      }
-    },
-    {
-      key: 'Key 4',
-      title: 'Title 4',
-      info: {
-        create: new Date().toString(),
-        edit: new Date().toString(),
-        lang: 'dutch'
-      }
-    },
-    {
-      key: 'Key 5',
-      title: 'Title 5',
-      info: {
-        create: new Date().toString(),
-        edit: new Date().toString(),
-        lang: 'dutch'
-      }
-    },
-    {
-      key: 'Key 6',
-      title: 'Title 6',
-      info: {
-        create: new Date().toString(),
-        edit: new Date().toString(),
-        lang: 'dutch'
-      }
-    },
-  ];
+  newFile = '';
+  files = [];
 
   ngOnInit() {
+    this.getAllFiles();
+  }
+
+  getAllFiles() {
+    this.http.post('http://127.0.0.1:8081/getAllFiles', {})
+      .subscribe(
+        res => {
+          if (res && (res as any).Items) {
+            this.files = (res as any).Items;
+          }
+          console.log(res);
+        },
+        err => {
+          console.log('Error occured');
+        }
+      );
+
+    this.newFile = '';
+  }
+
+  createFile() {
+    this.http.post('http://127.0.0.1:8081/createFile', {
+        key: new Date().getTime().toString(),
+        title: this.newFile
+      })
+      .subscribe(
+        res => {
+          if (res) {
+            this.getAllFiles();
+          }
+        },
+        err => {
+          console.log('Error occured');
+        }
+      );
+
+    this.newFile = '';
+  }
+
+  deleteFile(file) {
+    this.http.post('http://127.0.0.1:8081/deleteFile', {
+      key: file.key,
+      title: file.title
+    })
+      .subscribe(
+        res => {
+          if (res) {
+            this.getAllFiles();
+          }
+          console.log(res);
+        },
+        err => {
+          console.log('Error occured');
+        }
+      );
   }
 
   openFile(file) {
-    this.router.navigate(['edit/' + file.key]);
+    this.router.navigate(['edit/', file.key, file.title]);
   }
+
 }
