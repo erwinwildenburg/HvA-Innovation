@@ -19,10 +19,10 @@ RUN mkdir -p /home/LogFiles \
 	&& mkdir -p /defaulthome/hostingstart
 
 # Configure ports
-EXPOSE 8000
+EXPOSE 8080 2222
 
 # Configure the dotnet core app
-ENV PORT 8000
+ENV PORT 8080
 ENV WEBSITE_ROLE_INSTANCE_ID localRoleInstance
 ENV WEBSITE_INSTANCE_ID localInstance
 ENV ASPNETCORE_URLS=
