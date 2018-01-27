@@ -300,3 +300,6 @@ __pycache__/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# OSX
+.DS_Store
