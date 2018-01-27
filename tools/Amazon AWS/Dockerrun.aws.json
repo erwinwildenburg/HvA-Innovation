@@ -8,6 +8,12 @@
       }
     },
 	{
+      "name": "api-conf",
+      "host": {
+        "sourcePath": "/var/app/current/api"
+      }
+    },
+	{
       "name": "identityserver-conf",
       "host": {
         "sourcePath": "/var/app/current/identityserver"
@@ -15,9 +21,22 @@
     }
   ],
   "containerDefinitions": [
+      {
+      "name": "api",
+      "image": "148979812968.dkr.ecr.eu-central-1.amazonaws.com/hva-innovation/api:latest",
+      "essential": true,
+      "memory": 128,
+      "mountPoints": [
+        {
+          "sourceVolume": "api-conf",
+          "containerPath": "/var/app/current",
+          "readOnly": true
+        }
+      ]
+    },
 	{
       "name": "identityserver",
-      "image": "xxxx.dkr.ecr.eu-central-1.amazonaws.com/identityserver:latest",
+      "image": "148979812968.dkr.ecr.eu-central-1.amazonaws.com/hva-innovation/identityserver:latest",
       "essential": true,
       "memory": 128,
       "mountPoints": [
@@ -30,7 +49,7 @@
     },
 	{
       "name": "dashboard",
-      "image": "xxxx.dkr.ecr.eu-central-1.amazonaws.com/dashboard:latest",
+      "image": "148979812968.dkr.ecr.eu-central-1.amazonaws.com/hva-innovation/dashboard:latest",
       "essential": true,
       "memory": 128
     },
@@ -46,6 +65,8 @@
         }
       ],
       "links": [
+		"api",
+		"dashboard",
 		"identityserver"
       ],
       "mountPoints": [
