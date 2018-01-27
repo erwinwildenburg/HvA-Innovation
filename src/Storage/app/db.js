@@ -1,4 +1,6 @@
 function DynamoDB() {
+    var Promise = require('promise');
+
     var AWS = require('aws-sdk');
     AWS.config.loadFromPath('./config.json');
 
@@ -54,14 +56,17 @@ DynamoDB.prototype.select = function (object) {
         }
     };
 
-    this.docClient.get(params, function (err, data) {
-        if (err) {
-            console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
-            return false;
-        } else {
-            console.log("GetItem succeeded:", JSON.stringify(data, null, 2));
-            return data;
-        }
+    var self = this;
+    return new Promise(function (resolve, reject) {
+        self.docClient.get(params, function (err, data) {
+            if (err) {
+                console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
+                reject(false);
+            } else {
+                console.log("GetItem succeeded:", JSON.stringify(data, null, 2));
+                resolve(data);
+            }
+        });
     });
 };
 
@@ -79,60 +84,88 @@ DynamoDB.prototype.insert = function (object) {
         }
     };
 
-    this.docClient.put(params, function (err, data) {
-        if (err) {
-            console.error("Unable to add object", object.title, ". Error JSON:", JSON.stringify(err, null, 2));
-            return false;
-        } else {
-            console.log("PutItem succeeded:", object.title);
-            return data;
-        }
+    var self = this;
+    return new Promise(function (resolve, reject) {
+        self.docClient.put(params, function (err, data) {
+            if (err) {
+                console.error("Unable to add object", object.title, ". Error JSON:", JSON.stringify(err, null, 2));
+                reject(false);
+            } else {
+                console.log("PutItem succeeded:", object.title);
+                resolve(data);
+            }
+        });
     });
 };
 
 DynamoDB.prototype.update = function (object) {
     var params = {
         TableName: this.table,
-        Key:{
+        Key: {
             "key": object.key,
             "title": object.title
         },
         UpdateExpression: "set info.lang=:r, info.edit=:p",
-        ExpressionAttributeValues:{
+        ExpressionAttributeValues: {
             ":r": object.lang,
             ":p": new Date().toString()
         },
-        ReturnValues:"UPDATED_NEW"
+        ReturnValues: "UPDATED_NEW"
     };
 
-    this.docClient.update(params, function(err, data) {
-        if (err) {
-            console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
-            return false;
-        } else {
-            console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
-            return data;
-        }
+    var self = this;
+    return new Promise(function (resolve, reject) {
+        self.docClient.update(params, function (err, data) {
+            if (err) {
+                console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
+                reject(false);
+            } else {
+                console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
+                resolve(data);
+            }
+        });
     });
 };
 
 DynamoDB.prototype.delete = function (object) {
     var params = {
         TableName: this.table,
-        Key:{
-            "key":object.key,
-            "title":object.title
+        Key: {
+            "key": object.key,
+            "title": object.title
         },
     };
-    
-    this.docClient.delete(params, function(err, data) {
-        if (err) {
-            console.error("Unable to delete item. Error JSON:", JSON.stringify(err, null, 2));
-            return false;
-        } else {
-            console.log("DeleteItem succeeded:", JSON.stringify(data, null, 2));
-            return data;
+
+    var self = this;
+    return new Promise(function (resolve, reject) {
+        self.docClient.delete(params, function (err, data) {
+            if (err) {
+                console.error("Unable to delete item. Error JSON:", JSON.stringify(err, null, 2));
+                reject(false);
+            } else {
+                console.log("DeleteItem succeeded:", JSON.stringify(data, null, 2));
+                resolve(data);
+            }
+        });
+    });
+};
+
+DynamoDB.prototype.selectAll = function () {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+        var params = {
+            TableName: self.table
         }
+
+        self.docClient.scan(params, function (err, data) {
+            if (err) {
+                console.error("Unable to scan table. Error JSON:", JSON.stringify(err, null, 2));
+                reject(false);
+            } else {
+                console.log("Table scan succeeded:", JSON.stringify(data, null, 2));
+                resolve(data);
+            }
+        });
     });
 };
 
@@ -140,10 +173,11 @@ DynamoDB.create = function () {
     return new DynamoDB();
 }
 
+module.exports = DynamoDB.create();
 
 /*
 var object = {
-    key: "testkey2",
+    key: "testkey5",
     title: "testtitle2",
     lang: "fr"
 };
@@ -154,4 +188,5 @@ var run = DynamoDB.create();
 // run.select(object);
 // run.update(object);
 // run.delete(object);
+//run.selectAll();
 */

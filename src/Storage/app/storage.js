@@ -1,4 +1,6 @@
 function Storage() {
+    var Promise = require('promise');
+
     var AWS = require('aws-sdk');
     AWS.config.loadFromPath('./config.json');
 
@@ -7,31 +9,37 @@ function Storage() {
 }
 
 Storage.prototype.createBucket = function () {
-    this.s3.createBucket({
-        Bucket: this.bucket
-    }, function (err, data) {
-        if (err) {
-            console.error("Unable to create bucket. Error JSON:", JSON.stringify(err, null, 2));
-            return false;
-        } else {
-            console.log("Create bucket succeeded:", JSON.stringify(data, null, 2));
-            return data;
-        }
+    var self = this;
+    return new Promise(function (resolve, reject) {
+        self.s3.createBucket({
+            Bucket: self.bucket
+        }, function (err, data) {
+            if (err) {
+                console.error("Unable to create bucket. Error JSON:", JSON.stringify(err, null, 2));
+                reject(false);
+            } else {
+                console.log("Create bucket succeeded:", JSON.stringify(data, null, 2));
+                resolve(data);
+            }
+        });
     });
 };
 
 Storage.prototype.get = function (object) {
-    this.s3.getObject({
-        Bucket: this.bucket,
-        Key: object.key
-    }, function (err, data) {
-        if (err) {
-            console.error("Unable to get object. Error JSON:", JSON.stringify(err, null, 2));
-            return false;
-        } else {
-            console.log("Get object succeeded:", JSON.stringify(data, null, 2));
-            return data;
-        }
+    var self = this;
+    return new Promise(function (resolve, reject) {
+        self.s3.getObject({
+            Bucket: self.bucket,
+            Key: object.key
+        }, function (err, data) {
+            if (err) {
+                console.error("Unable to get object. Error JSON:", JSON.stringify(err, null, 2));
+                reject(false);
+            } else {
+                console.log("Get object succeeded:", JSON.stringify(data, null, 2));
+                resolve(data);
+            }
+        });
     });
 };
 
@@ -42,14 +50,17 @@ Storage.prototype.put = function (object) {
         Body: object.content
     };
 
-    this.s3.putObject(params, function (err, data) {
-        if (err) {
-            console.error("Unable to store object. Error JSON:", JSON.stringify(err, null, 2));
-            return false;
-        } else {
-            console.log("Store object succeeded:", JSON.stringify(data, null, 2));
-            return data;
-        }
+    var self = this;
+    return new Promise(function (resolve, reject) {
+        self.s3.putObject(params, function (err, data) {
+            if (err) {
+                console.error("Unable to store object. Error JSON:", JSON.stringify(err, null, 2));
+                reject(false);
+            } else {
+                console.log("Store object succeeded:", JSON.stringify(data, null, 2));
+                resolve(data);
+            }
+        });
     });
 };
 
@@ -63,14 +74,17 @@ Storage.prototype.delete = function (object) {
         Key: object.key
     };
 
-    this.s3.deleteObject(params, function (err, data) {
-        if (err) {
-            console.error("Unable to delete object. Error JSON:", JSON.stringify(err, null, 2));
-            return false;
-        } else {
-            console.log("Delete object succeeded:", JSON.stringify(data, null, 2));
-            return data;
-        }
+    var self = this;
+    return new Promise(function (resolve, reject) {
+        self.s3.deleteObject(params, function (err, data) {
+            if (err) {
+                console.error("Unable to delete object. Error JSON:", JSON.stringify(err, null, 2));
+                reject(false);
+            } else {
+                console.log("Delete object succeeded:", JSON.stringify(data, null, 2));
+                resolve(data);
+            }
+        });
     });
 };
 
@@ -78,15 +92,17 @@ Storage.create = function () {
     return new Storage();
 }
 
+module.exports = Storage.create();
+
 /*
 var object = {
-    key: "testkey",
+    key: "testkey5",
     content: "Body of the file"
 };
 
 var run = Storage.create();
 // run.createBucket();
-// run.put(object);
+//run.put(object);
 // run.get(object);
 // run.update(object);
 // run.delete(object);
