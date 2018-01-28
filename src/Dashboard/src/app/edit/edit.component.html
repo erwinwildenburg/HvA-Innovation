@@ -35,3 +35,19 @@
     </div>
   </div>
 </section>
+
+<script type="text/javascript">
+  (function ($) {
+    "use strict"; // Start of use strict
+
+    // Remove license header
+    setTimeout(function() {
+      $('a').each(function(key, object){
+        if($(object).attr('href') == 'https://www.froala.com/wysiwyg-editor?k=u'){
+          $(object).remove();
+        }
+      });
+    }, 600);
+
+  }); // End of use strict
+</script>
