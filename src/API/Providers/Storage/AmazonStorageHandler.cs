@@ -22,9 +22,6 @@ namespace API.Providers.Storage
         public string AmazonAccessKey { get; set; }
         public string AmazonSecretAccessKey { get; set; }
         public string AmazonRegion { get; set; }
-        public string ConfigurationBucketName { get; set; }
-        public string ReportStatusDataBucketName { get; set; }
-        public string BuildQueueUrl { get; set; }
 
         private DynamoDBContext _dDbContext;
         private IAmazonS3 _s3Client;
@@ -37,7 +34,48 @@ namespace API.Providers.Storage
             _dDbContext = new DynamoDBContext(new AmazonDynamoDBClient(AmazonAccessKey, AmazonSecretAccessKey, region));
         }
 
+        public async Task<List<StoredFileInfo>> GetFileInfo(Guid id)
+        {
+            List<ScanCondition> conditions;
+            // Get results for only deviceId
+            if (id != Guid.Empty)
+            {
+                // Search all results
+                conditions = new List<ScanCondition>
+                {
+                    new ScanCondition("Id", ScanOperator.Equal, id)
+                };
+                return (await _dDbContext.ScanAsync<DynamoDbStoredFileInfo>(conditions).GetRemainingAsync()).Select(x => x.ToStoredFileInfo()).ToList();
+            }
+
+            // Search all results
+            conditions = new List<ScanCondition> { };
+            return (await _dDbContext.ScanAsync<DynamoDbStoredFileInfo>(conditions).GetRemainingAsync()).Select(x => x.ToStoredFileInfo()).ToList();
+        }
+
         #region -- Amazon AWS Objects --
+
+        [DynamoDBTable("hva-innovation-files")]
+        public class DynamoDbStoredFileInfo
+        {
+            [DynamoDBHashKey] private string Id { get; set; }
+            public string Name { get; set; }
+            public string Language { get; set; }
+            public DateTime CreatedAt { get; set; }
+            public DateTime UpdatedAt { get; set; }
+
+            public StoredFileInfo ToStoredFileInfo()
+            {
+                return new StoredFileInfo
+                {
+                    Id = Guid.Parse(Id),
+                    Name = Name,
+                    Language = Language,
+                    CreatedAt = CreatedAt,
+                    UpdatedAt = UpdatedAt
+                };
+            }
+        }
 
         #endregion -- Amazon AWS Objects --
 

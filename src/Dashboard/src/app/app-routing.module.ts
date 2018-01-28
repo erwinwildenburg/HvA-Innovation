@@ -14,7 +14,7 @@ const appRoutes: Routes = [
   { path: 'files', component: FilesComponent, canActivate: [AuthGuardService] },
   { path: 'edit/:file', component: EditComponent, canActivate: [AuthGuardService] },
   { path: 'about', component: AboutComponent, canActivate: [AuthGuardService] },
-  { path: '', redirectTo: '/files', pathMatch: 'full', canActivate: [AuthGuardService] },
+  { path: '', pathMatch: 'full', redirectTo: '/files' },
   { path: '**', component: PageNotFoundComponent, canActivate: [AuthGuardService] }
 ];
 

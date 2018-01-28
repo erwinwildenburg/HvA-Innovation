@@ -17,6 +17,7 @@ import { AuthSilentComponent } from './auth-silent.component';
 
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { FilesComponent } from './files/files.component';
+import { FilesService } from './files/files.service';
 import { EditComponent } from './edit/edit.component';
 import { AboutComponent } from './about/about.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
@@ -52,7 +53,8 @@ import 'rxjs/add/operator/filter';
   providers: [
     AuthHttpService,
     AuthGuardService,
-    AuthService
+    AuthService,
+    FilesService
   ],
   bootstrap: [AppComponent]
 })

@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterModule, Router } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
+import { StoredFileInfo } from '../../models/storedfileinfo';
+import { FilesService } from './files.service';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-files',
@@ -8,66 +11,18 @@ import { RouterModule, Router } from '@angular/router';
 })
 export class FilesComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  public files: StoredFileInfo[];
+  private selectedId: string;
 
-  files = [
-    {
-      key: 'Key 1',
-      title: 'Title 1',
-      info: {
-        create: new Date().toString(),
-        edit: new Date().toString(),
-        lang: 'dutch'
-      }
-    },
-    {
-      key: 'Key 2',
-      title: 'Title 2',
-      info: {
-        create: new Date().toString(),
-        edit: new Date().toString(),
-        lang: 'dutch'
-      }
-    },
-    {
-      key: 'Key 3',
-      title: 'Title 3',
-      info: {
-        create: new Date().toString(),
-        edit: new Date().toString(),
-        lang: 'dutch'
-      }
-    },
-    {
-      key: 'Key 4',
-      title: 'Title 4',
-      info: {
-        create: new Date().toString(),
-        edit: new Date().toString(),
-        lang: 'dutch'
-      }
-    },
-    {
-      key: 'Key 5',
-      title: 'Title 5',
-      info: {
-        create: new Date().toString(),
-        edit: new Date().toString(),
-        lang: 'dutch'
-      }
-    },
-    {
-      key: 'Key 6',
-      title: 'Title 6',
-      info: {
-        create: new Date().toString(),
-        edit: new Date().toString(),
-        lang: 'dutch'
-      }
-    },
-  ];
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private filesService: FilesService,
+  ) { }
 
   ngOnInit() {
+    this.filesService.getFiles(null)
+      .subscribe((files: StoredFileInfo[]) => this.files = files);
   }
 
   openFile(file) {
