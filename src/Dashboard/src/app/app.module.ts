@@ -18,6 +18,7 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { FilesComponent } from './files/files.component';
 import { FilesService } from './files/files.service';
 import { EditComponent } from './edit/edit.component';
+import { EditService } from './edit/edit.service';
 import { AboutComponent } from './about/about.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
@@ -50,7 +51,8 @@ import 'rxjs/add/operator/filter';
     AuthHttpService,
     AuthGuardService,
     AuthService,
-    FilesService
+    FilesService,
+    EditService
   ],
   bootstrap: [AppComponent]
 })

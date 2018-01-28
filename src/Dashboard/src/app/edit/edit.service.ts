@@ -7,7 +7,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AuthService } from '../auth.service';
 
 @Injectable()
-export class FilesService {
+export class EditService {
 
   private filesUrl: string = environment.apiUrl;
   private headers: HttpHeaders = new HttpHeaders();
@@ -25,24 +25,23 @@ export class FilesService {
     }
   }
 
-  public getAllFiles(): Observable<StoredFile[]>  {
-    // this.setHeaders();
-    return this.httpClient.post<StoredFile[]>(this.filesUrl + '/getAllFiles', {});
-  }
-
-  public createFile(params) {
-    // this.setHeaders();
-    return this.httpClient.post(this.filesUrl + '/createFile', {
-        key: new Date().getTime().toString(),
-        title: params.title
-      });
-  }
-
-  public deleteFile(file) {
-    // this.setHeaders();
-    return this.httpClient.post(this.filesUrl + '/deleteFile', {
-      key: file.key,
-      title: file.title
+  public getFile(params): Observable<StoredFile[]>  {
+    this.setHeaders();
+    return this.httpClient.post<StoredFile[]>(this.filesUrl + '/getFile', {
+      key: params.key,
+      title: params.title
     });
+  }
+
+  public getContent(params) {
+    this.setHeaders();
+    return this.httpClient.post(this.filesUrl + '/getFileContent', {
+      key: params.key
+    });
+  }
+
+  public storeFile(file) {
+    this.setHeaders();
+    return this.httpClient.post(this.filesUrl + '/storeFile', file);
   }
 }

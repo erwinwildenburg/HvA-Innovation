@@ -6,7 +6,7 @@
 export const environment = {
   production: false,
   baseTitle: 'HvA Innovation',
-  apiUrl: 'https://api.innovation.hva.powershelldsc.cloud',
+  apiUrl: 'https://storage.innovation.hva.powershelldsc.cloud/',
 
   authority: 'https://identity.innovation.hva.powershelldsc.cloud',
   client_id: 'dashboard',

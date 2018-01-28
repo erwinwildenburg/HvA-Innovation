@@ -8,22 +8,13 @@ import { EditComponent } from './edit/edit.component';
 import { AboutComponent } from './about/about.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
-// const appRoutes: Routes = [
-//   { path: 'auth-silent', component: AuthSilentComponent },
-//   { path: 'files', component: FilesComponent, canActivate: [AuthGuardService] },
-//   { path: 'edit/:file', component: EditComponent, canActivate: [AuthGuardService] },
-//   { path: 'about', component: AboutComponent, canActivate: [AuthGuardService] },
-//   { path: '', pathMatch: 'full', redirectTo: '/files' },
-//   { path: '**', component: PageNotFoundComponent, canActivate: [AuthGuardService] }
-// ];
-
 const appRoutes: Routes = [
   { path: 'auth-silent', component: AuthSilentComponent },
-  { path: 'files', component: FilesComponent},
-  { path: 'edit/:key/:title', component: EditComponent},
-  { path: 'about', component: AboutComponent},
+  { path: 'files', component: FilesComponent, canActivate: [AuthGuardService] },
+  { path: 'edit/:key/:title', component: EditComponent, canActivate: [AuthGuardService] },
+  { path: 'about', component: AboutComponent, canActivate: [AuthGuardService] },
   { path: '', pathMatch: 'full', redirectTo: '/files' },
-  { path: '**', component: PageNotFoundComponent}
+  { path: '**', component: PageNotFoundComponent, canActivate: [AuthGuardService] }
 ];
 
 @NgModule({

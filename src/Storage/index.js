@@ -32,7 +32,7 @@ app.use(allowCrossDomain);
 
 app.post('/getAllFiles', function (req, res) {
     db.selectAll().then(function (data) {
-        res.json(data);
+        res.json(data.Items);
     }, function (err) {
         res.json(err);
     });
@@ -46,7 +46,7 @@ app.post('/getFile', function (req, res) {
     }
 
     db.select(params).then(function (data) {
-        res.json(data);
+        res.json(data.Item);
     }, function (err) {
         res.json(err);
     });
