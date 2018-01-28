@@ -7,16 +7,22 @@
         "sourcePath": "/var/app/current/nginx-proxy"
       }
     },
-	{
+	  {
       "name": "api-conf",
       "host": {
         "sourcePath": "/var/app/current/api"
       }
     },
-	{
+	  {
       "name": "identityserver-conf",
       "host": {
         "sourcePath": "/var/app/current/identityserver"
+      }
+    },
+    {
+      "name": "storage-conf",
+      "host": {
+        "sourcePath": "/var/app/current/storage"
       }
     }
   ],
@@ -34,7 +40,7 @@
         }
       ]
     },
-	{
+	  {
       "name": "identityserver",
       "image": "148979812968.dkr.ecr.eu-central-1.amazonaws.com/hva-innovation/identityserver:latest",
       "essential": true,
@@ -47,7 +53,20 @@
         }
       ]
     },
-	{
+    {
+      "name": "storage",
+      "image": "148979812968.dkr.ecr.eu-central-1.amazonaws.com/hva-innovation/storage:latest",
+      "essential": true,
+      "memory": 128,
+      "mountPoints": [
+        {
+          "sourceVolume": "storage-conf",
+          "containerPath": "/var/app/current",
+          "readOnly": true
+        }
+      ]
+    },
+	  {
       "name": "dashboard",
       "image": "148979812968.dkr.ecr.eu-central-1.amazonaws.com/hva-innovation/dashboard:latest",
       "essential": true,
@@ -65,9 +84,10 @@
         }
       ],
       "links": [
-		"api",
-		"dashboard",
-		"identityserver"
+        "api",
+        "dashboard",
+        "identityserver",
+        "storage"
       ],
       "mountPoints": [
         {

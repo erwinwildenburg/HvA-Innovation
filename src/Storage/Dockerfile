@@ -1,5 +1,16 @@
-FROM httpd:latest
+FROM node:latest
 ARG source
+
+# Copy init_container.sh to the /bin directory
+COPY ${source:-init_container.sh} /bin/
+RUN chmod 755 /bin/init_container.sh
+
+# Configure ports
+EXPOSE 8081
+
+# Configure the node.js app
+COPY . /app
+
 WORKDIR /app
-COPY ${source:-httpd.conf} /usr/local/apache2/conf/
-COPY ${source:-dist} /usr/local/apache2/htdocs
+
+ENTRYPOINT ["/bin/init_container.sh"]
