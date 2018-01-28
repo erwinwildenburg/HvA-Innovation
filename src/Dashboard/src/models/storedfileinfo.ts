@@ -1,8 +1,11 @@
+export class StoredFile {
+  public key: string;
+  public title: string;
+  public info: StoredFileInfo;
+}
+
 export class StoredFileInfo {
-    public id = '00000000-0000-0000-0000-000000000000';
-    public name: string;
-    public language: string;
-    public createdAt: Date;
-    public updatedAt: Date;
-  }
-  
+  public lang: string;
+  public create: string;
+  public edit: string;
+}

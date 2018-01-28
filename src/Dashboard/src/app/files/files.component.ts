@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterModule, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { Router, ActivatedRoute, Params } from '@angular/router';
+import { StoredFile, StoredFileInfo } from '../../models/storedfileinfo';
+import { FilesService } from './files.service';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-files',
@@ -9,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class FilesComponent implements OnInit {
 
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(private router: Router, private filesService: FilesService) {}
 
   newFile = '';
   files = [];
@@ -19,57 +21,16 @@ export class FilesComponent implements OnInit {
   }
 
   getAllFiles() {
-    this.http.post('http://127.0.0.1:8081/getAllFiles', {})
-      .subscribe(
-        res => {
-          if (res && (res as any).Items) {
-            this.files = (res as any).Items;
-          }
-          console.log(res);
-        },
-        err => {
-          console.log('Error occured');
-        }
-      );
-
-    this.newFile = '';
+    this.filesService.getAllFiles().subscribe((files: StoredFile[]) => this.files = files);
   }
 
   createFile() {
-    this.http.post('http://127.0.0.1:8081/createFile', {
-        key: new Date().getTime().toString(),
-        title: this.newFile
-      })
-      .subscribe(
-        res => {
-          if (res) {
-            this.getAllFiles();
-          }
-        },
-        err => {
-          console.log('Error occured');
-        }
-      );
-
+    this.filesService.createFile({title: this.newFile}).subscribe((files: StoredFile[]) => this.getAllFiles());
     this.newFile = '';
   }
 
   deleteFile(file) {
-    this.http.post('http://127.0.0.1:8081/deleteFile', {
-      key: file.key,
-      title: file.title
-    })
-      .subscribe(
-        res => {
-          if (res) {
-            this.getAllFiles();
-          }
-          console.log(res);
-        },
-        err => {
-          console.log('Error occured');
-        }
-      );
+    this.filesService.deleteFile(file).subscribe((files: StoredFile[]) => this.getAllFiles());
   }
 
   openFile(file) {

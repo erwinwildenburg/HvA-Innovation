@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/Observable/ErrorObservable';
-import { StoredFileInfo } from '../../models/storedfileinfo';
+import { StoredFile, StoredFileInfo } from '../../models/storedfileinfo';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AuthService } from '../auth.service';
 
 @Injectable()
 export class FilesService {
 
-  private filesUrl: string = environment.apiUrl + '/files';
+  private filesUrl: string = environment.apiUrl;
   private headers: HttpHeaders = new HttpHeaders();
 
   constructor(
@@ -25,10 +25,26 @@ export class FilesService {
     }
   }
 
-  public getFiles(id: string): Observable<StoredFileInfo[]> {
-    this.setHeaders();
-    const params = id ? new HttpParams().set('id', id) : undefined;
+  public getAllFiles(): Observable<StoredFile[]>  {
+    // this.setHeaders();
 
-    return this.httpClient.get<StoredFileInfo[]>(this.filesUrl, { headers: this.headers, params: params });
+    console.log(this.filesUrl);
+    return this.httpClient.post<StoredFile[]>(this.filesUrl + '/getAllFiles', {});
+  }
+
+  public createFile(params) {
+    // this.setHeaders();
+    return this.httpClient.post(this.filesUrl + '/createFile', {
+        key: new Date().getTime().toString(),
+        title: params.title
+      });
+  }
+
+  public deleteFile(file) {
+    // this.setHeaders();
+    return this.httpClient.post(this.filesUrl + '/deleteFile', {
+      key: file.key,
+      title: file.title
+    });
   }
 }
