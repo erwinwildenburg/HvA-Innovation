@@ -5,7 +5,7 @@ function Storage() {
     AWS.config.loadFromPath('./config.json');
 
     this.s3 = new AWS.S3();
-    this.bucket = 'innovation-document-bucket';
+    this.bucket = 'hva-innovation-files';
 }
 
 Storage.prototype.createBucket = function () {
