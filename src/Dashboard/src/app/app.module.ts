@@ -6,7 +6,6 @@ import { NgModule } from '@angular/core';
 import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home.component';
 
 import { AppRoutingModule } from './app-routing.module';
 

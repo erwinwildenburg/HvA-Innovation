@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuardService } from './auth-guard.service';
 
-import { HomeComponent } from './home.component';
 import { AuthSilentComponent } from './auth-silent.component';
 import { FilesComponent } from './files/files.component';
 import { EditComponent } from './edit/edit.component';

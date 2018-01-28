@@ -23,7 +23,7 @@
     "@angular/platform-browser-dynamic": "^5.2.2",
     "@angular/router": "^5.2.2",
     "angular-froala-wysiwyg": "^2.7.3",
-    "bootstrap": "git://github.com/twbs/bootstrap.git#v4-dev",
+    "bootstrap": "^4.0.0",
     "core-js": "^2.4.1",
     "jquery.easing": "^1.4.1",
     "oidc-client": "^1.4.1",
