@@ -73,13 +73,14 @@
         $('.navbar-collapse').collapse('hide');
       });
 
-      // Activate scrollspy to add active class to navbar items on scroll
-      $('body').scrollspy({
-        target: '#mainNav',
-        offset: 54
+      // Remove license header
+      $('a').each(function(key, object){
+	      if($(object).attr('href') == 'https://www.froala.com/wysiwyg-editor?k=u'){
+    	    $(object).remove();
+	      }
       });
 
-    })(jQuery); // End of use strict
+    }); // End of use strict
 
   </script>
 </body>
