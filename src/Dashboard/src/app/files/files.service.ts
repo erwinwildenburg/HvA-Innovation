@@ -26,12 +26,12 @@ export class FilesService {
   }
 
   public getAllFiles(): Observable<StoredFile[]>  {
-    // this.setHeaders();
+    this.setHeaders();
     return this.httpClient.post<StoredFile[]>(this.filesUrl + '/getAllFiles', {});
   }
 
   public createFile(params) {
-    // this.setHeaders();
+    this.setHeaders();
     return this.httpClient.post(this.filesUrl + '/createFile', {
         key: new Date().getTime().toString(),
         title: params.title
@@ -39,7 +39,7 @@ export class FilesService {
   }
 
   public deleteFile(file) {
-    // this.setHeaders();
+    this.setHeaders();
     return this.httpClient.post(this.filesUrl + '/deleteFile', {
       key: file.key,
       title: file.title
