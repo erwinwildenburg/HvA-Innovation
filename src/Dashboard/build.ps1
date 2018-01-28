@@ -3,4 +3,4 @@ npm install
 ng build --prod
 
 # Build the docker container
-docker build -t dashboard .
+docker build -t hva-innovation/dashboard .

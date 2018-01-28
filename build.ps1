@@ -12,5 +12,10 @@ Set-Location ../../
 dotnet publish --configuration Release src/IdentityServer/IdentityServer.csproj -o obj/Docker/publish
 Remove-Item src/IdentityServer/obj/Docker/publish/appsettings.json -ErrorAction SilentlyContinue
 
+# Build the Storage
+Set-Location src/Storage
+npm install
+Set-Location ../../
+
 # Create docker images
 docker-compose build

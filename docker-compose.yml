@@ -16,3 +16,8 @@ services:
     build:
       context: ./src/IdentityServer
       dockerfile: Dockerfile
+  storage:
+    image: hva-innovation/storage
+    build:
+      context: ./src/Storage
+      dockerfile: Dockerfile
