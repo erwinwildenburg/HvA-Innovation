@@ -6,7 +6,7 @@
 # Copy appsettings.json if it's provided by Amazon
 FILE=/var/app/current/config.json
 if [ -f $FILE ]; then
-	cp $FILE /defaulthome/hostingstart/
+	cp $FILE /app/
 fi
 
 exec node index.js
